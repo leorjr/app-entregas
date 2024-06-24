@@ -1,3 +1,5 @@
+version: "3.8"
+
 services:
   app:
     build:
@@ -9,8 +11,6 @@ services:
       - postgres
     ports:
       - "3000:3000"
-    expose:
-      - 3000
     networks:
       - unicad-network
     env_file:
@@ -23,12 +23,22 @@ services:
       context: ./sistema-entregas-frontend
       dockerfile: Dockerfile
     container_name: web-app
-    ports:
-      - "3001:80"
-    environment:
-      - NODE_ENV=production
     networks:
       - unicad-network
+    environment:
+      - NODE_ENV=production
+
+  nginx:
+    image: nginx:alpine
+    container_name: nginx-proxy
+    ports:
+      - "80:80"
+    networks:
+      - unicad-network
+    depends_on:
+      - web
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
 
   postgres:
     image: postgres:latest
