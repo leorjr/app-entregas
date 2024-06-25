@@ -37,6 +37,7 @@ services:
       - unicad-network
     depends_on:
       - web
+      - app
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf
 
